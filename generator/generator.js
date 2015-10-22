@@ -14,7 +14,7 @@ function addHoverDom(treeId, treeNode) {
   var btn = $("#addBtn_" + treeNode.tId);
   if (btn) {btn.bind("click", function() {
     var zTree = $.fn.zTree.getZTreeObj("zTree");
-    zTree.addNodes(treeNode, { id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++) });
+    zTree.addNodes(treeNode, { id:(100 + newCount), pId:treeNode.id, name:"New Option" + (newCount++) });
     return false;
   });};
 };
@@ -32,11 +32,6 @@ var zSetting = {
       leaf: true,
       parent: true
     }
-  },
-  async: {
-    enable: true,
-    url: "stand_to_ztree.php",
-    autoParam: [ "id" ]
   },
   edit: {
     enable: true,
@@ -58,10 +53,18 @@ var zSetting = {
     dblClickExpand: false
   }
 };
-
+var nodes;
 $(document).ready(function() {
+  $.getJSON("stand_to_ztree.php", function(result) {
+    nodes = result;
+    $.fn.zTree.init($("#zTree"), zSetting, nodes);
+  });
 
-  $.fn.zTree.init($("#zTree"), zSetting);
+  $("#button_add").click(function() {
+    var treeObj = $.fn.zTree.getZTreeObj("zTree");
+    var newNodes = [ { "id": 200 + newCount++, "name": "New Question title",  "qInfo": "New Question information",  "qPic": "New Question Picture URL",  "qChoice": "s",  "isParent": true, "nocheck": true } ];
+    treeObj.addNodes(null, newNodes);
+  });
 
   $("#button_sub").click(function() {
     var treeObj = $.fn.zTree.getZTreeObj("zTree");
